@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+//import ErrorPage from './ErrorPage';
+import Home from './Home';
+import LoginPage from './Login.tsx';
+import { AuthContext } from './context/AuthContext.tsx';
+import { useAuth } from './useAuth.ts';
+import { useUser } from './useUser.ts';
+import React from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = () => {
+    const { user } = useAuth();
+    const { setUser } = useUser();
+
+    return (
+        <AuthContext.Provider value={{ user, setUser }}>
+            <BrowserRouter>
+                <Routes>
+                    <Route
+                        path="/"
+                        element={ <Home /> }
+                    />
+                    {/* The next line is very important for the Navigate component to work */}
+                    <Route
+                        path="/login"
+                        element={ <LoginPage /> }
+                    />
+                </Routes>
+            </BrowserRouter>
+        </AuthContext.Provider>
+        
+    );
 }
-
 export default App;
